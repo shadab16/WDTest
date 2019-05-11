@@ -21,7 +21,7 @@ class PostPermissionService
 
     private function getCurrentUserId()
     {
-        // FIXME: Take from user session
+        // FIXME: Get logged-in user from session
         return 2;
     }
 

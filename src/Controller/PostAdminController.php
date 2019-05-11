@@ -35,7 +35,7 @@ class PostAdminController extends AbstractController
     {
         $post = new \App\Entity\Post();
 
-        // FIXME: Take value from user session
+        // FIXME: Get logged-in user from session
         $post->setAuthorId(2);
 
         $form = $this->createFormBuilder($post)
