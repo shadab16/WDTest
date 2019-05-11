@@ -1,8 +1,5 @@
 TECHNICAL DEBT
 
-No DI for Repository classes:
-    Manually pass the Connection
-
 No separate DAO layer
     Services directly interact with DBAL
 
@@ -21,7 +18,7 @@ ROADMAP
 - Backend edit          [done]
 - Backend save          [done]
 - backend update        [done]
-- Backend delete        []
+- Backend delete        [done]
 - Guest page            []
 - User login            []
-- Route access control  []
+- Route access control  [done]
