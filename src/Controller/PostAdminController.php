@@ -8,18 +8,30 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Repository\PostService;
+use App\Repository\PostPermissionService;
 
 class PostAdminController extends AbstractController
 {
-    public function index(PostService $postService)
+    private $postService;
+    private $postPermissionService;
+
+    public function __construct(PostService $postService, PostPermissionService $postPermissionService)
     {
-        $posts = $postService->getAllPosts();
+        $this->postService = $postService;
+        $this->postPermissionService = $postPermissionService;
+    }
+
+    public function index()
+    {
+        $posts = $this->postService->getAllPosts();
+        $canDeletePosts = $this->postPermissionService->canDeleteAny();
         return $this->render('post-admin-index.html.twig', [
-            'posts' => $posts
+            'posts' => $posts,
+            'canDeletePosts' => $canDeletePosts
         ]);
     }
 
-    public function create(Request $request, PostService $postService)
+    public function create(Request $request)
     {
         $post = new \App\Entity\Post();
 
@@ -37,7 +49,7 @@ class PostAdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid())
         {
             $post = $form->getData();
-            $postService->savePost($post);
+            $this->postService->savePost($post);
             return $this->redirectToRoute('post_admin_list');
         }
 
@@ -49,9 +61,14 @@ class PostAdminController extends AbstractController
         ]);
     }
 
-    public function edit(string $postId, PostService $postService, Request $request)
+    public function edit(string $postId, Request $request)
     {
-        $post = $postService->getPostById($postId);
+        $post = $this->postService->getPostById($postId);
+
+        if (!$this->postPermissionService->canEdit($post))
+        {
+            throw new \RuntimeException('Cannot edit post with the mentioned ID');
+        }
 
         $form = $this->createFormBuilder($post)
             ->add('title', TextType::class)
@@ -64,7 +81,7 @@ class PostAdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid())
         {
             $post = $form->getData();
-            $postService->updatePost($post);
+            $this->postService->updatePost($post);
             return $this->redirectToRoute('post_admin_list');
         }
 
@@ -79,9 +96,15 @@ class PostAdminController extends AbstractController
 
     }
 
-    public function delete(string $postId, PostService $postService)
+    public function delete(string $postId)
     {
-        $postService->deletePost($postId);
+        $post = $this->postService->getPostById($postId);
+        if (!$this->postPermissionService->canDelete($post))
+        {
+            throw new \RuntimeException('Cannot delete post with the mentioned ID');
+        }
+
+        $this->postService->deletePost($post);
         return $this->render('post-admin-delete.html.twig', [
             'postId' => $postId
         ]);

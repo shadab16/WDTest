@@ -8,6 +8,7 @@
             <tr>
                 <td>ID</td>
                 <td>Title</td>
+                <td>Action</td>
             </tr>
         <thead>
         <tbody>
@@ -18,6 +19,13 @@
                     <a href="{{ path('post_admin_edit', {'postId': post.postId}) }}">
                         {{ post.title }}
                     </a>
+                </td>
+                <td>
+                    {% if canDeletePosts %}
+                    <form action="{{ path('post_admin_delete', {'postId': post.postId}) }}" method="post">
+                        <input type="submit" value="Delete" />
+                    </form>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}

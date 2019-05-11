@@ -85,8 +85,10 @@ class PostService
         ]);
     }
 
-    public function deletePost(string $postId)
+    public function deletePost(Post $post)
     {
-        return null;
+        $this->connection->delete('post', [
+            'post_id' => $post->getPostId()
+        ]);
     }
 }
