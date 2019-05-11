@@ -22,6 +22,11 @@ class PostAdminController extends AbstractController
         $this->postService = $postService;
         $this->postPermissionService = $postPermissionService;
         $this->session = $session;
+
+        if (empty($this->session->get('userId')))
+        {
+            throw new \RuntimeException('No logged-in user present');
+        }
     }
 
     public function index()
