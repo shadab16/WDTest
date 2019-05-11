@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 {% block body %}
 
+<h2>Impersonate a User</h2>
+
 <form action="{{ path('index_access') }}" method="post">
     <input name="email" required maxlength="255" />
     <input type="submit" value"Access Via" />

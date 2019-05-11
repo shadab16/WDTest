@@ -6,6 +6,11 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
+        [
+            <strong><a href="{{ path('index') }}">Impersonate</a></strong> |
+            <strong><a href="{{ path('post_list') }}">Listing</a></strong> |
+            <strong><a href="{{ path('post_admin_list') }}">Backend</a></strong>
+        ]
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
