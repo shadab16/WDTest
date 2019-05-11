@@ -54,7 +54,7 @@ class PostService
         return null;
     }
 
-    public function deletePost(Post $post)
+    public function deletePost(string $postId)
     {
         return null;
     }

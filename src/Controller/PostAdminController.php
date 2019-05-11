@@ -2,7 +2,10 @@
 namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Repository\PostService;
 
 class PostAdminController extends AbstractController
@@ -15,31 +18,49 @@ class PostAdminController extends AbstractController
         ]);
     }
 
-    public function create(PostService $postService)
+    public function create(Request $request, PostService $postService)
     {
-        $post = $postService->create('', '', 'Sample Title', 'Sample Content');
+        $post = new \App\Entity\Post();
+
+        $form = $this->createFormBuilder($post)
+            ->add('title', TextType::class)
+            ->add('content', TextType::class)
+            ->add('save', SubmitType::class, ['label' => 'Save Post'])
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $post = $form->getData();
+            echo '<pre>'; print_r($post); die;
+
+            return $this->redirectToRoute('post_admin_list');
+        }
+
+        $saveUrl = $this->generateUrl('post_admin_create');
         return $this->render('post-admin-edit.html.twig', [
-            'post' => $post
+            'form' => $form->createView(),
+            'post' => $post,
+            'saveUrl' => $saveUrl
         ]);
     }
 
     public function edit(string $postId, PostService $postService)
     {
         $post = $postService->getPostById($postId);
-        return $this->render('post-admin-edit.html.twig', [
-            'post' => $post
+        $saveUrl = $this->generateUrl('post_admin_edit', [
+            'postId' => $postId
         ]);
-    }
-
-    public function save(PostService $postService)
-    {
-        return $this->render('post-admin-save.html.twig', [
-            'post' => []
+        return $this->render('post-admin-edit.html.twig', [
+            'post' => $post,
+            'saveUrl' => $saveUrl
         ]);
     }
 
     public function delete(string $postId, PostService $postService)
     {
+        $postService->deletePost($postId);
         return $this->render('post-admin-delete.html.twig', [
             'postId' => $postId
         ]);
