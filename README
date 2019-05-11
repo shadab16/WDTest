@@ -1,0 +1,25 @@
+TECHNICAL DEBT
+
+No DI for Repository classes:
+    Manually pass the Connection
+
+No separate DAO layer
+    Services directly interact with DBAL
+
+No flash messages
+    Friendly success/error messages not present
+
+
+ROADMAP
+
+- Frontend listing      [done]
+- Frontend view         [done]
+- Backend listing       [done]
+- Backend create        [done]
+- Backend edit          [done]
+- Backend save          []
+- backend update        []
+- Backend delete        []
+- Guest page            []
+- User login            []
+- Route access control  []

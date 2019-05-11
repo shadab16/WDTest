@@ -6,10 +6,12 @@ use Doctrine\DBAL\Driver\Connection;
 class PostService
 {
     protected $connection;
+    protected $userService;
 
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, UserService $userService)
     {
         $this->connection = $connection;
+        $this->userService = $userService;
     }
 
     public static function create(string $postId, string $authorId, string $title, string $content)
@@ -23,6 +25,9 @@ class PostService
 
     public function getPostById(string $id)
     {
+        echo '<pre>';
+        print_r($this->userService->getPermissionsByUser(1)); die;
+
         $stmt = $this->connection->prepare('SELECT * FROM post WHERE post_id = ?');
         $stmt->bindValue(1, $id);
         $stmt->execute();
