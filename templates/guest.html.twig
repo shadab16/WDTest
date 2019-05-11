@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+<form action="{{ path('index_access') }}" method="post">
+    <input name="email" required maxlength="255" />
+    <input type="submit" value"Access Via" />
+</form>
+
+{% endblock %}

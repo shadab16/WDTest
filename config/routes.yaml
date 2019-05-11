@@ -1,6 +1,10 @@
 index:
   path: /
-  controller: App\Controller\PostController::index
+  controller: App\Controller\GuestController::index
+
+index_access:
+  path: /access
+  controller: App\Controller\GuestController::access
 
 post_list:
   path: /posts

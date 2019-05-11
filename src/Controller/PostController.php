@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use App\Repository\PostService;
 use App\Repository\PostPermissionService;
 
@@ -10,11 +11,13 @@ class PostController extends AbstractController
 {
     private $postService;
     private $postPermissionService;
+    private $session;
 
-    public function __construct(PostService $postService, PostPermissionService $postPermissionService)
+    public function __construct(PostService $postService, PostPermissionService $postPermissionService, SessionInterface $session)
     {
         $this->postService = $postService;
         $this->postPermissionService = $postPermissionService;
+        $this->session = $session;
     }
 
     public function index()
@@ -25,8 +28,8 @@ class PostController extends AbstractController
         }
         else
         {
-            // FIXME: Get logged-in user from session
-            $posts = $posts = $this->postService->getAllowedPosts(2);
+            $loggedUserId = $this->session->get('userId');
+            $posts = $posts = $this->postService->getAllowedPosts($loggedUserId);
         }
         return $this->render('post-index.html.twig', [
             'posts' => $posts

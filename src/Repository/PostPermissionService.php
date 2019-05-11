@@ -21,8 +21,8 @@ class PostPermissionService
 
     private function getCurrentUserId()
     {
-        // FIXME: Get logged-in user from session
-        return 2;
+        $loggedUserId = $this->session->get('userId');
+        return $loggedUserId;
     }
 
     public function canViewAny()

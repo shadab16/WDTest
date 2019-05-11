@@ -19,8 +19,8 @@ class PermissionService
 
     public function can(string $permission)
     {
-        // FIXME: Get logged-in user from session
-        $permissionBag = $this->userService->getPermissionsByUser(2);
+        $loggedUserId = $this->session->get('userId');
+        $permissionBag = $this->userService->getPermissionsByUser($loggedUserId);
         return $permissionBag->has($permission);
     }
 

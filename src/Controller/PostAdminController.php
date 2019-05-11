@@ -4,6 +4,7 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -12,13 +13,15 @@ use App\Repository\PostPermissionService;
 
 class PostAdminController extends AbstractController
 {
+    private $session;
     private $postService;
     private $postPermissionService;
 
-    public function __construct(PostService $postService, PostPermissionService $postPermissionService)
+    public function __construct(PostService $postService, PostPermissionService $postPermissionService, SessionInterface $session)
     {
         $this->postService = $postService;
         $this->postPermissionService = $postPermissionService;
+        $this->session = $session;
     }
 
     public function index()
@@ -29,8 +32,8 @@ class PostAdminController extends AbstractController
         }
         else
         {
-            // FIXME: Get logged-in user from session
-            $posts = $posts = $this->postService->getAllowedPosts(2);
+            $loggedUserId = $this->session->get('userId');
+            $posts = $posts = $this->postService->getAllowedPosts($loggedUserId);
         }
         return $this->render('post-admin-index.html.twig', [
             'posts' => $posts,
@@ -42,8 +45,8 @@ class PostAdminController extends AbstractController
     {
         $post = new \App\Entity\Post();
 
-        // FIXME: Get logged-in user from session
-        $post->setAuthorId(2);
+        $loggedUserId = $this->session->get('userId');
+        $post->setAuthorId($loggedUserId);
 
         $form = $this->createFormBuilder($post)
             ->add('title', TextType::class)
