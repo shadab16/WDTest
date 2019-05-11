@@ -68,7 +68,12 @@ class PostService
 
     public function updatePost(Post $post)
     {
-        return null;
+        $this->connection->update('post', [
+            'title' => $post->getTitle(),
+            'content' => $post->getContent()
+        ], [
+            'post_id' => $post->getPostId()
+        ]);
     }
 
     public function deletePost(string $postId)

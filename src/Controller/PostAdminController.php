@@ -22,12 +22,14 @@ class PostAdminController extends AbstractController
     public function create(Request $request, PostService $postService)
     {
         $post = new \App\Entity\Post();
+
+        // FIXME: Take value from user session
         $post->setAuthorId(2);
 
         $form = $this->createFormBuilder($post)
             ->add('title', TextType::class)
             ->add('content', TextareaType::class)
-            ->add('save', SubmitType::class, ['label' => 'Save Post'])
+            ->add('save', SubmitType::class, ['label' => 'Create Post'])
             ->getForm();
 
         $form->handleRequest($request);
@@ -47,16 +49,34 @@ class PostAdminController extends AbstractController
         ]);
     }
 
-    public function edit(string $postId, PostService $postService)
+    public function edit(string $postId, PostService $postService, Request $request)
     {
         $post = $postService->getPostById($postId);
+
+        $form = $this->createFormBuilder($post)
+            ->add('title', TextType::class)
+            ->add('content', TextareaType::class)
+            ->add('save', SubmitType::class, ['label' => 'Save Post'])
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $post = $form->getData();
+            $postService->updatePost($post);
+            return $this->redirectToRoute('post_admin_list');
+        }
+
         $saveUrl = $this->generateUrl('post_admin_edit', [
             'postId' => $postId
         ]);
         return $this->render('post-admin-edit.html.twig', [
+            'form' => $form->createView(),
             'post' => $post,
             'saveUrl' => $saveUrl
         ]);
+
     }
 
     public function delete(string $postId, PostService $postService)
