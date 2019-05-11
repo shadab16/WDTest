@@ -9,6 +9,8 @@ No separate DAO layer
 No flash messages
     Friendly success/error messages not present
 
+No Symfony Firewall
+    Firewall, Roles, Tokens not configured
 
 ROADMAP
 

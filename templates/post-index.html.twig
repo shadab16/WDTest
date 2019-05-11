@@ -1,3 +1,6 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
 {% if posts %}
     <h2>Available Posts</h2>
     <table border="1" cellspacing="0">
@@ -23,3 +26,5 @@
 {% else %}
     <h2>There are no posts as of now</h2>
 {% endif %}
+
+{% endblock %}

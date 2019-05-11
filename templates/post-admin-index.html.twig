@@ -1,3 +1,6 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
 {% if posts %}
     <h2>Editable Posts</h2>
     <table border="1" cellspacing="0">
@@ -25,3 +28,5 @@
 {% endif %}
 
 <h3><a href="{{ path('post_admin_create') }}">Create</a></h3>
+
+{% endblock %}
