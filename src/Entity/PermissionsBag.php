@@ -18,9 +18,10 @@ class PermissionsBag
         }
     }
 
-    public function has(string $permission): boolean
+    public function has(string $permission)
     {
-        return ($this->lookup[$permission] === true);
+        return array_key_exists($permission, $this->lookup)
+            && ($this->lookup[$permission] === true);
     }
 
     public function getAll()

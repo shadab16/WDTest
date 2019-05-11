@@ -47,9 +47,17 @@ class PostService
         return $posts;
     }
 
-    public function getAllowedPosts(User $user)
+    public function getAllowedPosts(string $userId)
     {
-        return [];
+        $stmt = $this->connection->prepare('SELECT * FROM post WHERE author_id = ?');
+        $stmt->bindValue(1, $userId);
+        $stmt->execute();
+        $records = $stmt->fetchAll();
+        $posts = [];
+        foreach ($records as $record) {
+            $posts[] = self::create($record['post_id'], $record['author_id'], $record['title'], $record['content']);
+        }
+        return $posts;
     }
 
     public function savePost(Post $post)

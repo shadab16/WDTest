@@ -17,7 +17,7 @@ class PermissionService
         $this->userService = $userService;
     }
 
-    public function hasAccess(string $permission): boolean
+    public function can(string $permission)
     {
         // FIXME: Get logged-in user from session
         $permissionBag = $this->userService->getPermissionsByUser(1);
