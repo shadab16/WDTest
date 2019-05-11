@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Repository;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Doctrine\DBAL\Driver\Connection;
 use App\Entity\User;
 use App\Entity\PermissionsBag;
@@ -9,34 +8,19 @@ use App\Entity\PermissionsBag;
 class UserService
 {
     protected $connection;
-    protected $session;
 
-    public function __construct(Connection $connection, SessionInterface $session)
+    public function __construct(Connection $connection)
     {
         $this->connection = $connection;
-        $this->session = $session;
     }
 
-    public static function create(string $userId, string $name, string $email, string $passwordHash)
+    public static function create(string $userId, string $name, string $email, string $passwordHash): User
     {
         $user = new \App\Entity\User();
         return $user->setUserId($userId)
             ->setName($name)
             ->setEmail($email)
             ->setPasswordHash($passwordHash);
-    }
-
-    public function hasAccess(string $permission): boolean
-    {
-        // FIXME: Get logged-in user from session
-        return $this->getPermissionsByUser(1)
-            ->has($permission);
-    }
-
-    public function userHasAccess(string $userId, string $permission): boolean
-    {
-        return $this->getPermissionsByUser($userId)
-            ->has($permission);
     }
 
     public function getUserById(string $userId): User
