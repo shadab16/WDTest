@@ -1,0 +1,25 @@
+{% if posts %}
+    <h2>Available Posts</h2>
+    <table border="1" cellspacing="0">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Title</td>
+            </tr>
+        <thead>
+        <tbody>
+            {% for post in posts %}
+            <tr>
+                <td>{{ post.postId }}</td>
+                <td>
+                    <a href="{{ path('post_view', {'postId': post.postId}) }}">
+                        {{ post.title }}
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <h2>There are no posts as of now</h2>
+{% endif %}

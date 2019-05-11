@@ -1,3 +1,41 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+index:
+  path: /
+  controller: App\Controller\PostController::index
+
+post_list:
+  path: /posts
+  controller: App\Controller\PostController::index
+
+post_view:
+  path: /post/{postId}
+  controller: App\Controller\PostController::view
+  requirements:
+    postId: '\d+'
+
+post_admin_list:
+  path: /admin/posts
+  controller: App\Controller\PostAdminController::index
+
+post_admin_create:
+  path: /admin/post/create
+  controller: App\Controller\PostAdminController::create
+
+post_admin_edit:
+  path: /admin/post/{postId}/edit
+  controller: App\Controller\PostAdminController::edit
+  requirements:
+    postId: '\d+'
+
+post_admin_save:
+  path: /admin/post/save
+  controller: App\Controller\PostAdminController::save
+
+post_admin_delete:
+  path: /admin/post/{postId}/delete
+  controller: App\Controller\PostAdminController::delete
+  requirements:
+    postId: '\d+'
