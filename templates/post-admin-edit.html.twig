@@ -2,20 +2,8 @@
 {% block body %}
 
 <h2>{{ post.postId ? 'Edit' : 'Create' }} Post</h2>
-<h3>ID: {{ post.postId ?: '-NEW-' }} | Author: {{ post.authorId }}</h3>
+<h3>ID: {{ post.postId ?: '(NEW)' }} | Author: {{ post.authorId }}</h3>
 
-<form action="{{ saveUrl }}" method="post">
-
-    <h4><label for="title">Title</label></h4>
-    <input name="title" id="title" value="{{ post.title }}" maxlength="255" required />
-
-    <h4><label for="content">Content</label></h4>
-    <textarea name="content" id="content" required rows="10" cols="60"
-        maxlength="60000">{{ post.content }}</textarea>
-
-    <br />
-    <input type="submit" value="Save" />
-
-</form>
+{{ form(form) }}
 
 {% endblock %}

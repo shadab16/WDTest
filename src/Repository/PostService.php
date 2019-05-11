@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 use Doctrine\DBAL\Driver\Connection;
+use App\Entity\Post;
 
 class PostService
 {
@@ -52,6 +53,20 @@ class PostService
     }
 
     public function savePost(Post $post)
+    {
+        $this->connection->insert('post', [
+            'post_id' => null,
+            'author_id' => $post->getAuthorId(),
+            'title' => $post->getTitle(),
+            'content' => $post->getContent(),
+            'created_on' => time(),
+            'version' => 1,
+            'status' => Post::$STATUS_PUBLISHED
+        ]);
+        return $this->connection->lastInsertId();
+    }
+
+    public function updatePost(Post $post)
     {
         return null;
     }

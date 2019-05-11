@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Repository\PostService;
 
@@ -21,10 +22,11 @@ class PostAdminController extends AbstractController
     public function create(Request $request, PostService $postService)
     {
         $post = new \App\Entity\Post();
+        $post->setAuthorId(2);
 
         $form = $this->createFormBuilder($post)
             ->add('title', TextType::class)
-            ->add('content', TextType::class)
+            ->add('content', TextareaType::class)
             ->add('save', SubmitType::class, ['label' => 'Save Post'])
             ->getForm();
 
@@ -33,8 +35,7 @@ class PostAdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid())
         {
             $post = $form->getData();
-            echo '<pre>'; print_r($post); die;
-
+            $postService->savePost($post);
             return $this->redirectToRoute('post_admin_list');
         }
 
