@@ -2,7 +2,10 @@
 {% block body %}
 
 <h2>{{ post.postId ? 'Edit' : 'Create' }} Post</h2>
-<h3>ID: {{ post.postId ?: '(NEW)' }} | Author: {{ post.authorId }}</h3>
+<h3>
+    ID: {{ post.postId ?: '(NEW)' }} |
+    Author: {{ post.authorId }}
+</h3>
 
 {{ form(form) }}
 

@@ -70,7 +70,8 @@ class PostService
     {
         $this->connection->update('post', [
             'title' => $post->getTitle(),
-            'content' => $post->getContent()
+            'content' => $post->getContent(),
+            'modified_on' => time()
         ], [
             'post_id' => $post->getPostId()
         ]);
