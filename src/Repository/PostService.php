@@ -25,9 +25,6 @@ class PostService
 
     public function getPostById(string $id)
     {
-        echo '<pre>';
-        print_r($this->userService->getPermissionsByUser(1)); die;
-
         $stmt = $this->connection->prepare('SELECT * FROM post WHERE post_id = ?');
         $stmt->bindValue(1, $id);
         $stmt->execute();

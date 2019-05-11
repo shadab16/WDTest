@@ -17,8 +17,18 @@ class UserService
         $this->session = $session;
     }
 
+    public static function create(string $userId, string $name, string $email, string $passwordHash)
+    {
+        $user = new \App\Entity\User();
+        return $user->setUserId($userId)
+            ->setName($name)
+            ->setEmail($email)
+            ->setPasswordHash($passwordHash);
+    }
+
     public function hasAccess(string $permission): boolean
     {
+        // FIXME: Get logged-in user from session
         return $this->getPermissionsByUser(1)
             ->has($permission);
     }
@@ -29,14 +39,36 @@ class UserService
             ->has($permission);
     }
 
+    public function getUserById(string $userId): User
+    {
+        $stmt = $this->connection->prepare('select * from user where user_id = ?');
+        $stmt->bindValue(1, $userId);
+        $stmt->execute();
+        $record = $stmt->fetch();
+        if (empty($record))
+        {
+            throw new \RangeException('Unable to find user with the given ID');
+        }
+        return self::create($record['user_id'], $record['name'], $record['email'], $record['password_hash']);
+    }
+
     public function getUserByEmail(string $email): User
     {
-        return null;
+        $stmt = $this->connection->prepare('select * from user where email = ?');
+        $stmt->bindValue(1, $email);
+        $stmt->execute();
+        $record = $stmt->fetch();
+        if (empty($record))
+        {
+            throw new \RangeException('Unable to find user with the given email');
+        }
+        return self::create($record['user_id'], $record['name'], $record['email'], $record['password_hash']);
     }
 
     public function authenticate(string $email, string $secret): User
     {
-        return true;
+        $user = $this->getUserByEmail($email);
+        return password_verify($secret, $user->getPasswordHash());
     }
 
     public function getPermissionsByUser(string $userId): PermissionsBag
