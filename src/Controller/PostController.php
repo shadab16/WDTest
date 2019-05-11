@@ -25,6 +25,7 @@ class PostController extends AbstractController
         }
         else
         {
+            // FIXME: Get logged-in user from session
             $posts = $posts = $this->postService->getAllowedPosts(2);
         }
         return $this->render('post-index.html.twig', [

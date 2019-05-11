@@ -23,11 +23,18 @@ class PostAdminController extends AbstractController
 
     public function index()
     {
-        $posts = $this->postService->getAllPosts();
-        $canDeletePosts = $this->postPermissionService->canDeleteAny();
+        if ($this->postPermissionService->canEditAny())
+        {
+            $posts = $this->postService->getAllPosts();
+        }
+        else
+        {
+            // FIXME: Get logged-in user from session
+            $posts = $posts = $this->postService->getAllowedPosts(2);
+        }
         return $this->render('post-admin-index.html.twig', [
             'posts' => $posts,
-            'canDeletePosts' => $canDeletePosts
+            'canDeletePosts' => true
         ]);
     }
 
